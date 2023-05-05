@@ -1,0 +1,25 @@
+
+<div class="mb-3">
+    <div class="section-title mb-0">
+        <h4 class="m-0 text-uppercase font-weight-bold">Newsletter</h4>
+    </div>
+    <form action="{% url 'news:home' %}" method="post">
+    {% csrf_token %} 
+    <div class="bg-white text-center border border-top-0 p-3">
+        <p>Get in touch</p>
+        <div class="input-group mb-2" style="width: 100%;">
+                {% csrf_token %} 
+            
+            <input name="email" placeholder="Enter email address"
+				pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"
+				onfocus="this.placeholder = ''" onblur="this.placeholder = 'Your Email'"
+				class="form-control form-control-lg" required="" type="email">
+
+            <div class="input-group-append">
+                <button class="btn btn-primary font-weight-bold px-3" >Sign Up</button>
+            </div> 
+        </div>
+        <small>You can unsubscribe at any time</small>
+    </div>
+</form>
+</div>

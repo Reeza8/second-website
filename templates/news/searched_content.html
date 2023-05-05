@@ -1,169 +1,45 @@
+
 {%extends 'base.html'%}
 {% load static%}
 {% load humanize %}
 {%block body%}
 
-    <!-- Main News Slider Start -->
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-7 px-0">
-                <div class="owl-carousel main-carousel position-relative">
-                    {% for new in news %}
-                    
-                    {% if  forloop.counter > 2 and forloop.counter < 6 %}
-                    
-                    <div class="position-relative overflow-hidden" style="height: 500px;">
-                        <img class="img-fluid h-100" src="{{new.image.url}}" alt="no image" style="object-fit: cover;">
-                        <div class="overlay">
-                            <div class="mb-2">
-
-                                    {% for cat in new.category.all %}
-                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
-                                    href="{% url 'news:category' category=cat.name %}">{{cat.name}}</a>
-                                    {% endfor %}
-
-                                <a class="text-white" href="{% url 'news:category' date=new.created_date %}">{{new.created_date|naturaltime}}</a>
-                            </div>
-                            <a class="h2 m-0 text-white text-uppercase font-weight-bold" href="{% url 'news:single' id=new.id %}">{{new.title|safe}}</a>
-                        </div>
-                    </div>
-                    {% endif %}
-                    {% endfor %}
-                   
-                    
-                </div>
-            </div>
-            <div class="col-lg-5 px-0">
-                <div class="row mx-0">
-                    {% for new in news %}
-                    {% if  forloop.counter > 5 and forloop.counter < 10 %}
-                    <div class="col-md-6 px-0">
-                        <div class="position-relative overflow-hidden" style="height: 250px;">
-                            <img class="img-fluid w-100 h-100" src="{{new.image.url}}" alt="no image" style="object-fit: cover;">
-                            <div class="overlay">
-                                <div class="mb-2">
-                                    {% for cat in new.category.all %}
-                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
-                                    href="{% url 'news:category' category=cat.name %}">{{cat.name}}</a>
-                                    {% endfor %}
-                                    <a class="text-white" href="{% url 'news:category' date=new.created_date %}"><small>{{new.created_date|naturaltime}}</small></a>
-                                </div>
-                                <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="{% url 'news:single' id=new.id %}">{{new.title|safe}}</a>
-                            </div>
-                        </div>
-                    </div>
-                    {% endif %}
-                    {% endfor %}
-                    
-                    <!-- <div class="col-md-6 px-0">
-                        <div class="position-relative overflow-hidden" style="height: 250px;">
-                            <img class="img-fluid w-100 h-100" src="{% static 'img/news-700x435-4.jpg' %}" style="object-fit: cover;">
-                            <div class="overlay">
-                                <div class="mb-2">
-                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
-                                        href="">Business</a>
-                                    <a class="text-white" href=""><small>Jan 01, 2045</small></a>
-                                </div>
-                                <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="">Lorem ipsum dolor sit amet elit...</a>
-                            </div>
-                        </div>
-                    </div> -->
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Main News Slider End -->
-
-
-    <!-- Breaking News Start -->
-    <div class="container-fluid bg-dark py-3 mb-3">
-        <div class="container">
-            <div class="row align-items-center bg-dark">
-                <div class="col-12">
-                    <div class="d-flex justify-content-between">
-                        <div class="bg-primary text-dark text-center font-weight-medium py-2" style="width: 170px;">Breaking News</div>
-                        <div class="owl-carousel tranding-carousel position-relative d-inline-flex align-items-center ml-3"
-                            style="width: calc(100% - 190px); padding-right: 90px;">
-                            {% for new in news %}
-                            {% if  forloop.counter < 3 %}
-                            <div class="text-truncate"><a class="text-white text-uppercase font-weight-semi-bold" href="{% url 'news:single' id=new.id %}">{{new.title|safe}}</a></div>
-                            {% endif %}
-                            {% endfor %}  
-                           
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Breaking News End -->
-
-
-    <!-- Featured News Slider Start -->
-    <div class="container-fluid pt-5 mb-3">
-        <div class="container">
-            <div class="section-title">
-                <h4 class="m-0 text-uppercase font-weight-bold">Tranding News</h4>
-            </div>
-            <div class="owl-carousel news-carousel carousel-item-4 position-relative">
-                {% for new in latest_news %}
-                {% if  forloop.counter < 7 %}
-                <div class="position-relative overflow-hidden" style="height: 300px;">
-                    <img class="img-fluid h-100" src="{{new.image.url}}" style="object-fit: cover;">
-                    <div class="overlay">
-                        <div class="mb-2">
-                            {% for cat in new.category.all %}
-                            <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
-                            href="{% url 'news:category' category=cat.name %}">{{cat.name}}</a>
-                            {% endfor %}
-                           
-                            <a class="text-white" href="{% url 'news:category' date=new.created_date %}"><small>{{new.created_date|naturaltime}}</small></a>
-                        </div>
-                        <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="{% url 'news:single' id=new.id %}">{{new.title}}</a>
-                    </div>
-                </div>
-                {% endif %}
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    <!-- Featured News Slider End -->
-
 
     <!-- News With Sidebar Start -->
-    <div class="container-fluid">
+    <div class="container-fluid mt-5 pt-3">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8">
                     <div class="row">
                         <div class="col-12">
                             <div class="section-title">
-                                <h4 class="m-0 text-uppercase font-weight-bold">Latest News</h4>
-                                <a class="text-secondary font-weight-medium text-decoration-none" href="{% url 'news:category' category='All' %}">View All</a>
-                            </div>                        
+                                <h4 class="m-0 text-uppercase font-weight-bold">results</h4>
+
+                            </div>
                         </div>
-                            {% for new in news %}
-                            {% if forloop.counter > 0 and forloop.counter < 5 %}
+                       
+                        {% for new in news %}
+                       
+                        {% if forloop.counter > 0 and forloop.counter < 5 %}
                                 <div class="col-lg-6">
                                 <div class="position-relative mb-3">
-                                <!-- <img class="img-fluid w-100" src="{{new.image.url}}" style="object-fit: cover;"> -->
-                                <img class="w-100" max-width="50%" height="50%" src="{{new.image.url}}" alt="">
-
+                                <img class="img-fluid w-100" src="{{new.image.url}}" style="object-fit: cover;">
                                 <div class="bg-white border border-top-0 p-4">
                                     <div class="mb-2">
                                         
-                                            
+                                           
                                         {% for cat in new.category.all %}
                                         <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
-                                        href="{% url 'news:category' category=cat.name %}">{{cat.name}}</a>
+                                        href="">{{cat.name}}</a>
                                         {% endfor %}
                                             
                                        
-                                        <a class="text-body" href="{% url 'news:category' date=new.created_date %}"><small>{{new.created_date|naturaltime}}</small></a>
+                                        <a class="text-body" href=""><small>{{new.created_date|naturaltime}}</small></a>
                                     </div>
                                     <a class="h4 d-block mb-3 text-secondary text-uppercase font-weight-bold" href="{% url 'news:single' id=new.id %}">{{new.title}}</a>
                                     <p class="m-0">{{new.content|safe|truncatewords:6}}</p>
                                 </div>
+                                
                                 <div class="d-flex justify-content-between bg-white border border-top-0 p-4">
                                     <div class="d-flex align-items-center">
                                         <img class="rounded-circle mr-2" src="{% static 'img/user.jpg' %}" width="25" height="25" alt="">
@@ -181,16 +57,16 @@
 
                                 <div class="col-lg-6">
                                     <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
-                                        <img class="" max-width="100%" height="100%" src="{{new.image.url}}" alt="">
+                                        <img class="img-fluid" src="{{new.image.url}}" alt="">
                                         <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
                                             <div class="mb-2">
                                                 {% for cat in new.category.all %}
                                                 <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
-                                                href="{% url 'news:category' category=cat.name %}">{{cat.name}}</a>
+                                                href="">{{cat.name}}</a>
                                                 {% endfor %}
                                                     
                                                 
-                                                <a class="text-body" href="{% url 'news:category' date=new.created_date %}"><small>{{new.created_date|naturaltime}}</small></a>
+                                                <a class="text-body" href=""><small>{{new.created_date|naturaltime}}</small></a>
                                             </div>
                                             <a class="h6 m-0 text-secondary text-uppercase font-weight-bold" href="{% url 'news:single' id=new.id %}">{{new.title}}</a>
                                         </div>
@@ -201,20 +77,20 @@
                             <div class="col-lg-12">6
                                 <div class="row news-lg mx-0 mb-3">
                                     <div class="col-md-6 h-100 px-0">
-                                        <img class="img-fluid h-100" src="{% static 'img/news-700x435-5.jpg' %}" width="400px" style="object-fit: cover;">
+                                        <img class="img-fluid h-100" src="{% static 'img/news-700x435-5.jpg' %}" style="object-fit: cover;">
                                     </div>
                                     <div class="col-md-6 d-flex flex-column border bg-white h-100 px-0">
                                         <div class="mt-auto p-4">
                                             <div class="mb-2">
                                                 
-                                             {% for cat in new.category.all %}
-                                                 <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
-                                                 href="{% url 'news:category' category=cat.name %}">{{cat.name}}</a>
-                                             {% endfor %}
+                                                {% for cat in new.category.all %}
+                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
+                                    href="">{{cat.name}}</a>
+                                    {% endfor %}
                                                 
 
 
-                                                <a class="text-body" href="{% url 'news:category' date=new.created_date %}"><small>{{new.created_date|naturaltime}}</small></a>
+                                                <a class="text-body" href=""><small>{{new.created_date|naturaltime}}</small></a>
                                             </div>
                                             <a class="h4 d-block mb-3 text-secondary text-uppercase font-weight-bold" href="{% url 'news:single' id=new.id %}">{{new.title}}</a>
                                             <p class="m-0">{{new.content|safe|truncatewords:6}}</p>
@@ -232,21 +108,21 @@
                                     </div>
                                 </div>
                             </div>
-                            {% elif forloop.counter > 9 and forloop.counter < 14  %}
+                            {% elif forloop.counter > 9   %}
                             <div class="col-lg-6">
                                 <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
-                                    <img class="" max-width="100%" height="100%" src="{{new.image.url}}" alt="">
+                                    <img class="img-fluid" src="{{new.image.url}}" alt="">
                                     <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
                                         <div class="mb-2">
-                                            
+                                            <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">
                                                 {% for cat in new.category.all %}
                                                 <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
-                                                href="{% url 'news:category' category=cat.name %}">{{cat.name}}</a>
-                                            {% endfor %}
-                                            
+                                                 href="">{{cat.name}}</a>
+                                                 {% endfor %}
+                                            </a>
                                                 
                                             
-                                            <a class="text-body" href="{% url 'news:category' date=new.created_date %}"><small>{{new.created_date|naturaltime}}</small></a>
+                                            <a class="text-body" href=""><small>{{new.created_date|naturaltime}}</small></a>
                                         </div>
                                         <a class="h6 m-0 text-secondary text-uppercase font-weight-bold" href="{% url 'news:single' id=new.id %}">{{new.title}}</a>
                                     </div>
@@ -258,33 +134,61 @@
 
                         {% endif %}
                         {% endfor %}
-                        
-                        
-                        
-                        
-
-                        
-                      
                     </div>
                 </div>
                 
                 <div class="col-lg-4">
                     <!-- Social Follow Start -->
-                    {% include 'news/follow_us.html' %}
+                    <div class="mb-3">
+                        <div class="section-title mb-0">
+                            <h4 class="m-0 text-uppercase font-weight-bold">Follow Us</h4>
+                        </div>
+                        <div class="bg-white border border-top-0 p-3">
+                            <a href="" class="d-block w-100 text-white text-decoration-none mb-3" style="background: #39569E;">
+                                <i class="fab fa-facebook-f text-center py-4 mr-3" style="width: 65px; background: rgba(0, 0, 0, .2);"></i>
+                                <span class="font-weight-medium">12,345 Fans</span>
+                            </a>
+                            <a href="" class="d-block w-100 text-white text-decoration-none mb-3" style="background: #52AAF4;">
+                                <i class="fab fa-twitter text-center py-4 mr-3" style="width: 65px; background: rgba(0, 0, 0, .2);"></i>
+                                <span class="font-weight-medium">12,345 Followers</span>
+                            </a>
+                            <a href="" class="d-block w-100 text-white text-decoration-none mb-3" style="background: #0185AE;">
+                                <i class="fab fa-linkedin-in text-center py-4 mr-3" style="width: 65px; background: rgba(0, 0, 0, .2);"></i>
+                                <span class="font-weight-medium">12,345 Connects</span>
+                            </a>
+                            <a href="" class="d-block w-100 text-white text-decoration-none mb-3" style="background: #C8359D;">
+                                <i class="fab fa-instagram text-center py-4 mr-3" style="width: 65px; background: rgba(0, 0, 0, .2);"></i>
+                                <span class="font-weight-medium">12,345 Followers</span>
+                            </a>
+                            <a href="" class="d-block w-100 text-white text-decoration-none mb-3" style="background: #DC472E;">
+                                <i class="fab fa-youtube text-center py-4 mr-3" style="width: 65px; background: rgba(0, 0, 0, .2);"></i>
+                                <span class="font-weight-medium">12,345 Subscribers</span>
+                            </a>
+                            <a href="" class="d-block w-100 text-white text-decoration-none" style="background: #055570;">
+                                <i class="fab fa-vimeo-v text-center py-4 mr-3" style="width: 65px; background: rgba(0, 0, 0, .2);"></i>
+                                <span class="font-weight-medium">12,345 Followers</span>
+                            </a>
+                        </div>
+                    </div>
                     <!-- Social Follow End -->
 
                     <!-- Ads Start -->
-                    {% include 'news/advertise.html' %}
+                    <div class="mb-3">
+                        <div class="section-title mb-0">
+                            <h4 class="m-0 text-uppercase font-weight-bold">Advertisement</h4>
+                        </div>
+                        <div class="bg-white text-center border border-top-0 p-3">
+                            <a href=""><img class="img-fluid" src="{% static 'img/news-800x500-2.jpg' %}" alt="image did not loaded"></a>
+                        </div>
+                    </div>
                     <!-- Ads End -->
 
                     <!-- Popular News Start -->
-                    <!-- <div class="mb-3">
-                        <div class="section-title mb-0">
-                            <h4 class="m-0 text-uppercase font-weight-bold">Tranding News</h4>
-                        </div>
-                        <div class="bg-white border border-top-0 p-3">
+                    <div class="mb-3">
+                        
+                        <!-- <div class="bg-white border border-top-0 p-3">
                             <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
-                                <img class="img-fluid" src="{% static 'img/news-110x110-1.jpg' %}" alt="">
+                                <img class="img-fluid" src="{% static 'img/news-110x110-1.jpg' %}" alt="image did not loaded">
                                 <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
                                     <div class="mb-2">
                                         <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">Business</a>
@@ -294,7 +198,7 @@
                                 </div>
                             </div>
                             <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
-                                <img class="img-fluid" src="{% static 'img/news-110x110-2.jpg' %}" alt="">
+                                <img class="img-fluid" src="{% static 'img/news-110x110-2.jpg' %}" alt="image did not loaded">
                                 <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
                                     <div class="mb-2">
                                         <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">Business</a>
@@ -304,7 +208,7 @@
                                 </div>
                             </div>
                             <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
-                                <img class="img-fluid" src="{% static 'img/news-110x110-3.jpg' %}" alt="">
+                                <img class="img-fluid" src="{% static 'img/news-110x110-3.jpg' %}" alt="image did not loaded">
                                 <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
                                     <div class="mb-2">
                                         <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">Business</a>
@@ -314,7 +218,7 @@
                                 </div>
                             </div>
                             <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
-                                <img class="img-fluid" src="{% static 'img/news-110x110-4.jpg' %}" alt="">
+                                <img class="img-fluid" src="{% static 'img/news-110x110-4.jpg' %}" alt="image did not loaded">
                                 <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
                                     <div class="mb-2">
                                         <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">Business</a>
@@ -324,7 +228,7 @@
                                 </div>
                             </div>
                             <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
-                                <img class="img-fluid" src="{% static 'img/news-110x110-5.jpg' %}" alt="">
+                                <img class="img-fluid" src="{% static 'img/news-110x110-5.jpg' %}" alt="image did not loaded">
                                 <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
                                     <div class="mb-2">
                                         <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">Business</a>
@@ -333,8 +237,10 @@
                                     <a class="h6 m-0 text-secondary text-uppercase font-weight-bold" href="">Lorem ipsum dolor sit amet elit...</a>
                                 </div>
                             </div>
-                        </div>
-                    </div> -->
+                        </div> -->
+
+                        {% include 'news/latest_news.html' %}
+                    </div>
                     <!-- Popular News End -->
 
                     <!-- Newsletter Start -->
@@ -350,4 +256,5 @@
     </div>
     <!-- News With Sidebar End -->
 
-{% endblock %}
+
+    {% endblock %}

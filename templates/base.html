@@ -1,4 +1,7 @@
 {% load static %}
+{% load humanize %}
+
+{% load compress %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,6 +14,7 @@
     <meta content="Free HTML Templates" name="description">
 
     <!-- Favicon -->
+    {% compress css %}
     <link href="{% static 'img/favicon.ico' %}" rel="icon">
 
     <!-- Google Web Fonts -->
@@ -25,6 +29,7 @@
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    {% endcompress %}
 </head>
 
 <body>
@@ -35,17 +40,25 @@
                 <nav class="navbar navbar-expand-sm bg-dark p-0">
                     <ul class="navbar-nav ml-n2">
                         <li class="nav-item border-right border-secondary">
-                            <a class="nav-link text-body small" href="#">Monday, January 1, 2045</a>
-                        </li>
-                        <li class="nav-item border-right border-secondary">
-                            <a class="nav-link text-body small" href="#">Advertise</a>
+                            <a class="nav-link text-body small" href="https://www.time.ir/">{% now "d M Y" %}</a>
                         </li>
                         <li class="nav-item border-right border-secondary">
                             <a class="nav-link text-body small" href="{% url 'news:contact' %}">Contact</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-body small" href="#">Login</a>
+                        {% if request.user.is_authenticated %}
+                        <li class="nav-item border-right border-secondary">
+                            <a class="nav-link text-body small" href="{% url 'logout' %}">logged in as {{request.user.username}} (log out)</a>
                         </li>
+                        {% else %}    
+                        
+                        <li class="nav-item border-right border-secondary">
+                            <a class="nav-link text-body small" href="{% url 'login' %}">Login</a>
+                        </li>
+                        
+                        <li class="nav-item border-right border-secondary">
+                            <a class="nav-link text-body small" href="{% url 'news:signup' %}">Sign Up</a>
+                        </li>
+                        {% endif %}
                     </ul>
                 </nav>
             </div>
@@ -98,18 +111,29 @@
             <div class="collapse navbar-collapse justify-content-between px-0 px-lg-3" id="navbarCollapse">
                 <div class="navbar-nav mr-auto py-0">
                     <a href="{% url 'news:home' %}" class="nav-item nav-link active">Home</a>
-                    <a href="{% url 'news:category' %}" class="nav-item nav-link">Category</a>
-                    <a href="{% url 'news:single' %}" class="nav-item nav-link">Single News</a>
-                    
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">categories</a>
+                        <div class="dropdown-menu rounded-0 m-0">
+                            <a href="{% url 'news:category' category='Educations'  %}" class="dropdown-item">EDUCATION</a>
+                            <a href="{% url 'news:category' category='Politics' %}" class="dropdown-item">POLITICS</a>
+                            <a href="{% url 'news:category' category='Business' %}" class="dropdown-item">BUSINESS</a>
+                            <a href="{% url 'news:category' category='Health' %}" class="dropdown-item">HEALTH</a>
+                            <a href="{% url 'news:category' category='Science' %}" class="dropdown-item">SCIENCE</a>
+
+                        </div>
+                    </div>
                     <a href="{% url 'news:contact' %}" class="nav-item nav-link">Contact</a>
                 </div>
+            <form class="search-form" action="{% url 'news:search' %}" method="get">
                 <div class="input-group ml-auto d-none d-lg-flex" style="width: 100%; max-width: 300px;">
-                    <input type="text" class="form-control border-0" placeholder="Keyword">
+                    <input type="text" name="searched_text" class="form-control border-0" placeholder="Keyword">
                     <div class="input-group-append">
                         <button class="input-group-text bg-primary text-dark border-0 px-3"><i
                                 class="fa fa-search"></i></button>
                     </div>
+                
                 </div>
+            </form>
             </div>
         </nav>
     </div>
@@ -121,6 +145,11 @@
 
 
     {%endblock%}
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
+    {% endfor %}
+    {% endif %}
 
      <!-- Footer Start -->
      <div class="container-fluid bg-dark pt-5 px-sm-3 px-md-5 mt-5">
@@ -141,52 +170,32 @@
             </div>
             <div class="col-lg-3 col-md-6 mb-5">
                 <h5 class="mb-4 text-white text-uppercase font-weight-bold">Popular News</h5>
+                {% for new in latest_news %}
+                {% if  forloop.counter < 4 %}
                 <div class="mb-3">
                     <div class="mb-2">
-                        <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">Business</a>
-                        <a class="text-body" href=""><small>Jan 01, 2045</small></a>
+                        {% for cat in new.category.all %}
+                            <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
+                            href="">{{cat.name}}</a>
+                            {% endfor %}
+                        <a class="text-body" href=""><small>{{new.created_date|naturaltime}}</small></a>
                     </div>
-                    <a class="small text-body text-uppercase font-weight-medium" href="">Lorem ipsum dolor sit amet elit. Proin vitae porta diam...</a>
+                    <a class="small text-body text-uppercase font-weight-medium" href="{% url 'news:single' id=new.id %}">{{new.content|safe|truncatewords:4}}</a>
                 </div>
-                <div class="mb-3">
-                    <div class="mb-2">
-                        <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">Business</a>
-                        <a class="text-body" href=""><small>Jan 01, 2045</small></a>
-                    </div>
-                    <a class="small text-body text-uppercase font-weight-medium" href="">Lorem ipsum dolor sit amet elit. Proin vitae porta diam...</a>
-                </div>
-                <div class="">
-                    <div class="mb-2">
-                        <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">Business</a>
-                        <a class="text-body" href=""><small>Jan 01, 2045</small></a>
-                    </div>
-                    <a class="small text-body text-uppercase font-weight-medium" href="">Lorem ipsum dolor sit amet elit. Proin vitae porta diam...</a>
-                </div>
+                {% endif %}
+                {% endfor %}
             </div>
             <div class="col-lg-3 col-md-6 mb-5">
                 <h5 class="mb-4 text-white text-uppercase font-weight-bold">Categories</h5>
                 <div class="m-n1">
-                    <a href="" class="btn btn-sm btn-secondary m-1">Politics</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Business</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Corporate</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Business</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Health</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Education</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Science</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Business</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Foods</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Entertainment</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Travel</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Lifestyle</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Politics</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Business</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Corporate</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Business</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Health</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Education</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Science</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Business</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Foods</a>
+                    <a href="{% url 'news:category' category='Politics' %}" class="btn btn-sm btn-secondary m-1">Politics</a>
+                    <a href="{% url 'news:category' category='Business' %}" class="btn btn-sm btn-secondary m-1">Business</a>
+                    <a href="{% url 'news:category' category='Corporate' %}" class="btn btn-sm btn-secondary m-1">Corporate</a>
+                    <a href="{% url 'news:category' category='Health' %}" class="btn btn-sm btn-secondary m-1">Health</a>
+                    <a href="{% url 'news:category' category='Education' %}" class="btn btn-sm btn-secondary m-1">Education</a>
+                    <a href="{% url 'news:category' category='Science' %}" class="btn btn-sm btn-secondary m-1">Science</a>
+                    <a href="{% url 'news:category' category='Foods' %}" class="btn btn-sm btn-secondary m-1">Foods</a>
+                    <a href="{% url 'news:category' category='Travel' %}" class="btn btn-sm btn-secondary m-1">Travel</a>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 mb-5">
@@ -215,7 +224,7 @@
         </div>
     </div>
     <div class="container-fluid py-4 px-sm-3 px-md-5" style="background: #111111;">
-        <p class="m-0 text-center">&copy; <a href="#">Your Site Name</a>. All Rights Reserved. 
+        <p class="m-0 text-center">&copy; <a href="{% url 'news:home' %}">Biz News</a>. All Rights Reserved. 
 		
 		<!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
 		Design by <a href="https://htmlcodex.com">HTML Codex</a></p>
@@ -228,6 +237,7 @@
 
 
     <!-- JavaScript Libraries -->
+    {% compress js %}
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'lib/easing/easing.min.js' %}"></script>
@@ -235,6 +245,7 @@
 
     <!-- Template Javascript -->
     <script src="{% static 'js/main.js' %}"></script>
+    {% endcompress %}
 </body>
 
 </html>
